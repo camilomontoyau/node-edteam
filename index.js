@@ -46,6 +46,15 @@ const servidor = http.createServer((req, res) => {
   });
 });
 
+const enrutador = {
+  ejemplo: (data, callback) => {
+    callback(200, { mensaje: 'esto es un ejemplo' });
+  },
+  noEncontrado: (data, callback) => {
+    callback(404, 'no encontrado');
+  }
+};
+
 //el servidor debe mantener el proceso y escuchar peticiones http
 servidor.listen(3000, () => {
   console.log('El servidor está escuchando en el puerto 3000');
