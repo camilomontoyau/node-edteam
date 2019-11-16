@@ -3,6 +3,7 @@
 //dependencias
 const http = require('http');
 const url = require('url');
+const StringDecoder = require('string_decoder').StringDecoder;
 
 //crear el servidor
 const servidor = http.createServer((req, res) => {
@@ -24,6 +25,8 @@ const servidor = http.createServer((req, res) => {
   //Obtenemos los headers
   const headers = req.headers;
   console.log('headers', headers);
+  // Obtenemos un payload, si hay
+
   //enviamos la respuesta
   switch (rutaLimpia) {
     case 'hola':
