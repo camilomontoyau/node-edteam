@@ -10,6 +10,8 @@ const servidor = http.createServer((req, res) => {
   const urlParseada = url.parse(req.url, true);
   console.log('urlParseada', urlParseada);
   //obtenemos la ruta
+  const ruta = urlParseada.pathname;
+  console.log('ruta', ruta);
   //enviamos la respuesta
   res.end('Hola mundo desde un servidor de nodejs');
 });
