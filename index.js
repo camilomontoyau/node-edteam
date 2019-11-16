@@ -35,14 +35,27 @@ const servidor = http.createServer((req, res) => {
     buffer += decoder.end();
     console.log('buffer = ', buffer);
 
+    const data = {
+      ruta: rutaLimpia,
+      query,
+      metodo,
+      headers,
+      payload: buffer
+    };
+
     //enviamos la respuesta
-    switch (rutaLimpia) {
-      case 'hola':
-        res.end('ruta hola');
-        break;
-      default:
-        res.end('otra ruta');
+    let handler;
+    if (rutaLimpia) {
+      handler = enrutador[rutaLimpia];
+    } else {
+      handler = enrutador.noEncontrado;
     }
+
+    handler(data, (statusCode = 200, mensaje) => {
+      const respuesta = JSON.stringify(mensaje);
+      res.writeHead(statusCode);
+      res.end(respuesta);
+    });
   });
 });
 
@@ -51,7 +64,7 @@ const enrutador = {
     callback(200, { mensaje: 'esto es un ejemplo' });
   },
   noEncontrado: (data, callback) => {
-    callback(404, 'no encontrado');
+    callback(404, { mensaje: 'recurso no encontrado' });
   }
 };
 
