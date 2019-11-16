@@ -11,6 +11,7 @@ const enrutador = {
     callback(404, JSON.stringify({ mensaje: 'recurso no encontrado' }));
   },
   usuarios: (data, callback) => {
+    let usuarioId;
     switch (data.metodo) {
       case 'post':
         const identificador = _identificador();
@@ -26,7 +27,6 @@ const enrutador = {
         );
         break;
       case 'get':
-        let usuarioId;
         if (data.params && data.params.id) {
           usuarioId = data.params.id;
         } else {
@@ -40,6 +40,48 @@ const enrutador = {
               callback(500, JSON.stringify({ error }));
             } else if (usuario) {
               callback(200, usuario);
+            } else {
+              callback(
+                500,
+                JSON.stringify({ error: 'Hubo un error al leer el usuario' })
+              );
+            }
+          }
+        );
+        break;
+      case 'put':
+        if (data.params && data.params.id) {
+          usuarioId = data.params.id;
+        } else {
+          callback(404, JSON.stringify({ mensaje: 'recurso no encontrado' }));
+          break;
+        }
+        _data.obtenerUno(
+          { directorio: data.ruta, archivo: usuarioId },
+          (error, usuario) => {
+            if (error) {
+              callback(500, JSON.stringify({ error }));
+            } else if (usuario) {
+              _data.eliminarUno(
+                { directorio: data.ruta, archivo: usuarioId },
+                error => {
+                  if (error) return callback(500, JSON.stringify({ error }));
+                  _data.crear(
+                    {
+                      directorio: data.ruta,
+                      archivo: usuarioId,
+                      data: data.payload
+                    },
+                    error => {
+                      if (error) {
+                        callback(500, JSON.stringify({ error }));
+                      } else {
+                        callback(200, data.payload);
+                      }
+                    }
+                  );
+                }
+              );
             } else {
               callback(
                 500,
