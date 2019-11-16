@@ -1,3 +1,14 @@
+const url = require('url');
+const StringDecoder = require('string_decoder').StringDecoder;
+const enrutador = {
+  ejemplo: (data, callback) => {
+    callback(200, { mensaje: 'esto es un ejemplo' });
+  },
+  noEncontrado: (data, callback) => {
+    callback(404, { mensaje: 'recurso no encontrado' });
+  }
+};
+
 const servidorUnificado = (req, res) => {
   // obtener la url desde el request
   const urlParseada = url.parse(req.url, true);
