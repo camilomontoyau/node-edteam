@@ -24,7 +24,30 @@ const enrutador = {
             }
           }
         );
-
+        break;
+      case 'get':
+        let usuarioId;
+        if (data.params && data.params.id) {
+          usuarioId = data.params.id;
+        } else {
+          callback(404, JSON.stringify({ mensaje: 'recurso no encontrado' }));
+          break;
+        }
+        _data.obtenerUno(
+          { directorio: data.ruta, archivo: usuarioId },
+          (error, usuario) => {
+            if (error) {
+              callback(500, JSON.stringify({ error }));
+            } else if (usuario) {
+              callback(200, usuario);
+            } else {
+              callback(
+                500,
+                JSON.stringify({ error: 'Hubo un error al leer el usuario' })
+              );
+            }
+          }
+        );
         break;
 
       default:
@@ -70,13 +93,25 @@ const servidorUnificado = (req, res) => {
       query,
       metodo,
       headers,
-      payload: buffer
+      payload: buffer,
+      params: null
     };
 
     //enviamos la respuesta
+    const rutaIdentificador = rutaLimpia.split('/');
+    const [rutaRecurso, id] = rutaIdentificador;
     let handler;
     if (rutaLimpia && enrutador[rutaLimpia]) {
       handler = enrutador[rutaLimpia];
+    } else if (
+      rutaIdentificador.length > 0 &&
+      rutaRecurso &&
+      enrutador[rutaRecurso] &&
+      id
+    ) {
+      data.ruta = rutaRecurso;
+      data.params = { id };
+      handler = enrutador[rutaRecurso];
     } else {
       handler = enrutador.noEncontrado;
     }
