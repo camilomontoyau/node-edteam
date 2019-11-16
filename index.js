@@ -15,8 +15,15 @@ const servidor = http.createServer((req, res) => {
   //remover slashes
   const rutaLimpia = ruta.replace(/^\/+|\/+$/g, '');
   console.log('rutaLimpia', rutaLimpia);
+
   //enviamos la respuesta
-  res.end('Hola mundo desde un servidor de nodejs');
+  switch (rutaLimpia) {
+    case 'hola':
+      res.end('ruta hola');
+      break;
+    default:
+      res.end('otra ruta');
+  }
 });
 
 //el servidor debe mantener el proceso y escuchar peticiones http
