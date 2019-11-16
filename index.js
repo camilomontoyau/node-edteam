@@ -12,6 +12,9 @@ const servidor = http.createServer((req, res) => {
   //obtenemos la ruta
   const ruta = urlParseada.pathname;
   console.log('ruta', ruta);
+  //remover slashes
+  const rutaLimpia = ruta.replace(/^\/+|\/+$/g, '');
+  console.log('rutaLimpia', rutaLimpia);
   //enviamos la respuesta
   res.end('Hola mundo desde un servidor de nodejs');
 });
