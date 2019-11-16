@@ -31,6 +31,9 @@ const servidor = http.createServer((req, res) => {
   req.on('data', data => {
     buffer += decoder.write(data);
   });
+  req.on('end', () => {
+    buffer += decoder.end();
+  });
   //enviamos la respuesta
   switch (rutaLimpia) {
     case 'hola':
