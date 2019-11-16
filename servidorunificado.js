@@ -1,11 +1,36 @@
 const url = require('url');
 const StringDecoder = require('string_decoder').StringDecoder;
+const _data = require('./lib/data');
 const enrutador = {
   ejemplo: (data, callback) => {
-    callback(200, { mensaje: 'esto es un ejemplo' });
+    callback(200, JSON.stringify({ mensaje: 'esto es un ejemplo' }));
   },
   noEncontrado: (data, callback) => {
-    callback(404, { mensaje: 'recurso no encontrado' });
+    callback(404, JSON.stringify({ mensaje: 'recurso no encontrado' }));
+  },
+  usuarios: (data, callback) => {
+    switch (data.metodo) {
+      case 'post':
+        const identificador = 7;
+        _data.crear(
+          { directorio: data.ruta, archivo: identificador, data: data.payload },
+          error => {
+            if (error) {
+              callback(404, { error });
+            } else {
+              callback(201, data.payload);
+            }
+          }
+        );
+
+        break;
+
+      default:
+        callback(404, {
+          mensaje: `no puedes usar ${data.metodo} en ${data.ruta}`
+        });
+        break;
+    }
   }
 };
 
@@ -48,14 +73,13 @@ const servidorUnificado = (req, res) => {
 
     //enviamos la respuesta
     let handler;
-    if (rutaLimpia) {
+    if (rutaLimpia && enrutador[rutaLimpia]) {
       handler = enrutador[rutaLimpia];
     } else {
       handler = enrutador.noEncontrado;
     }
 
-    handler(data, (statusCode = 200, mensaje) => {
-      const respuesta = JSON.stringify(mensaje);
+    handler(data, (statusCode = 200, respuesta) => {
       res.setHeader('Content-Type', 'application/json');
       res.writeHead(statusCode);
       res.end(respuesta);
