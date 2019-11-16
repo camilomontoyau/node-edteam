@@ -18,7 +18,7 @@ const enrutador = {
           { directorio: data.ruta, archivo: identificador, data: data.payload },
           error => {
             if (error) {
-              callback(404, { error });
+              callback(500, JSON.stringify({ error }));
             } else {
               callback(201, data.payload);
             }
