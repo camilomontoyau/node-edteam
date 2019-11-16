@@ -21,6 +21,9 @@ const servidor = http.createServer((req, res) => {
   // Obtenemos los queries de url
   const query = urlParseada.query;
   console.log('query', JSON.stringify(query));
+  //Obtenemos los headers
+  const headers = req.headers;
+  console.log('headers', headers);
   //enviamos la respuesta
   switch (rutaLimpia) {
     case 'hola':
