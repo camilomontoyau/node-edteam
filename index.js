@@ -8,14 +8,16 @@ const url = require('url');
 const servidor = http.createServer((req, res) => {
   // obtener la url desde el request
   const urlParseada = url.parse(req.url, true);
-  console.log('urlParseada', urlParseada);
+  console.log('urlParseada ', urlParseada);
   //obtenemos la ruta
   const ruta = urlParseada.pathname;
-  console.log('ruta', ruta);
+  console.log('ruta ', ruta);
   //remover slashes
   const rutaLimpia = ruta.replace(/^\/+|\/+$/g, '');
-  console.log('rutaLimpia', rutaLimpia);
-
+  console.log('rutaLimpia ', rutaLimpia);
+  // Obtener el metodo http
+  const metodo = req.method.toLowerCase();
+  console.log('metodo ', metodo);
   //enviamos la respuesta
   switch (rutaLimpia) {
     case 'hola':
