@@ -27,21 +27,23 @@ const servidor = http.createServer((req, res) => {
   console.log('headers', headers);
   // Obtenemos un payload, si hay
   const decoder = new StringDecoder('utf-8');
-  const buffer = '';
+  let buffer = '';
   req.on('data', data => {
     buffer += decoder.write(data);
   });
   req.on('end', () => {
     buffer += decoder.end();
+    console.log('buffer = ', buffer);
+
+    //enviamos la respuesta
+    switch (rutaLimpia) {
+      case 'hola':
+        res.end('ruta hola');
+        break;
+      default:
+        res.end('otra ruta');
+    }
   });
-  //enviamos la respuesta
-  switch (rutaLimpia) {
-    case 'hola':
-      res.end('ruta hola');
-      break;
-    default:
-      res.end('otra ruta');
-  }
 });
 
 //el servidor debe mantener el proceso y escuchar peticiones http
