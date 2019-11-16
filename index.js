@@ -7,6 +7,8 @@ const url = require('url');
 //crear el servidor
 const servidor = http.createServer((req, res) => {
   // obtener la url desde el request
+  const urlParseada = url.parse(req.url, true);
+  console.log('urlParseada', urlParseada);
   //obtenemos la ruta
   //enviamos la respuesta
   res.end('Hola mundo desde un servidor de nodejs');
