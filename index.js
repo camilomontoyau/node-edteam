@@ -28,6 +28,9 @@ const servidor = http.createServer((req, res) => {
   // Obtenemos un payload, si hay
   const decoder = new StringDecoder('utf-8');
   const buffer = '';
+  req.on('data', data => {
+    buffer += decoder.write(data);
+  });
   //enviamos la respuesta
   switch (rutaLimpia) {
     case 'hola':
