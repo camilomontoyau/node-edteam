@@ -53,6 +53,7 @@ const servidor = http.createServer((req, res) => {
 
     handler(data, (statusCode = 200, mensaje) => {
       const respuesta = JSON.stringify(mensaje);
+      res.setHeader('Content-Type', 'application/json');
       res.writeHead(statusCode);
       res.end(respuesta);
     });
