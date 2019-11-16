@@ -1,6 +1,8 @@
 const url = require('url');
 const StringDecoder = require('string_decoder').StringDecoder;
 const _data = require('./lib/data');
+const _identificador = require('./lib/identificador');
+
 const enrutador = {
   ejemplo: (data, callback) => {
     callback(200, JSON.stringify({ mensaje: 'esto es un ejemplo' }));
@@ -11,7 +13,7 @@ const enrutador = {
   usuarios: (data, callback) => {
     switch (data.metodo) {
       case 'post':
-        const identificador = 7;
+        const identificador = _identificador();
         _data.crear(
           { directorio: data.ruta, archivo: identificador, data: data.payload },
           error => {
