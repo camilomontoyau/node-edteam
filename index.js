@@ -18,6 +18,9 @@ const servidor = http.createServer((req, res) => {
   // Obtener el metodo http
   const metodo = req.method.toLowerCase();
   console.log('metodo ', metodo);
+  // Obtenemos los queries de url
+  const query = urlParseada.query;
+  console.log('query', JSON.stringify(query));
   //enviamos la respuesta
   switch (rutaLimpia) {
     case 'hola':
