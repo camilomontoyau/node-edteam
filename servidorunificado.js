@@ -30,7 +30,18 @@ const enrutador = {
         if (data.params && data.params.id) {
           usuarioId = data.params.id;
         } else {
-          callback(404, JSON.stringify({ mensaje: 'recurso no encontrado' }));
+          _data.listar({ directorio: data.ruta }, (error, usuarios) => {
+            if (error) {
+              callback(500, JSON.stringify({ error }));
+            } else if (usuarios) {
+              callback(200, JSON.stringify(usuarios));
+            } else {
+              callback(
+                500,
+                JSON.stringify({ error: 'Hubo un error al leer los usuarios' })
+              );
+            }
+          });
           break;
         }
         _data.obtenerUno(
